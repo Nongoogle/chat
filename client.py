@@ -4,7 +4,7 @@ import tkinter as tk
 from tkinter import filedialog
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect(('something.up.railway.app', 50505))
+client.connect(('server.up.railway.app', 50505))
 
 def receive():
     buffer = b""
