@@ -4,7 +4,7 @@ import os
 import tkinter as tk
 from tkinter import filedialog
 
-HOST = "100.87.71.106"
+HOST = "100.121.91.60"
 PORT = 50505
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -85,7 +85,7 @@ chat = tk.Text(
     bg="#2b2b2b",
     fg="white",
     insertbackground="white",
-    state=tk.DISABLED)
+    )
 chat.pack(padx=10, pady=10)
 
 entry = tk.Entry(
