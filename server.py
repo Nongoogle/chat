@@ -32,9 +32,9 @@ def handle_client(conn, addr):
 
             buffer += data
 
-            if b"<END>" in buffer:
-                full_msg, buffer = buffer.split(b"<END>", 1)
-                broadcast(full_msg + b"<END>", conn)
+            while b"<END>" in buffer:
+              full_msg, buffer = buffer.split(b"<END>", 1)
+              broadcast(full_msg + b"<END>", conn)
 
         except:
             break

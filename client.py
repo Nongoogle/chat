@@ -3,6 +3,7 @@ import threading
 import tkinter as tk
 from tkinter import filedialog
 
+
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect(('chat.up.railway.app', 50505))
 
@@ -16,7 +17,7 @@ def receive():
 
             buffer += data
 
-            if b"<END>" in buffer:
+            while b"<END>" in buffer:
                 full_msg, buffer = buffer.split(b"<END>", 1)
 
                 header, body = full_msg.split(b"\n", 1)
@@ -25,10 +26,11 @@ def receive():
                 if info[0] == "MSG":
                     chat.insert(tk.END, "Other: " + body.decode() + "\n")
 
-                else:
+                elif info[0] == "FILE":
                     filename = "received_" + info[1].split("/")[-1]
                     with open(filename, "wb") as f:
                         f.write(body)
+
                     chat.insert(tk.END, f"Received file: {filename}\n")
 
         except:
