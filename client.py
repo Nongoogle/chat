@@ -3,7 +3,7 @@ import threading
 import tkinter as tk
 from tkinter import filedialog
 
-HOST = "41.236.245.75"
+HOST = "100.87.71.106"
 PORT = 50505
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
