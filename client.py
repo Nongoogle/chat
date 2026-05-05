@@ -3,9 +3,11 @@ import threading
 import tkinter as tk
 from tkinter import filedialog
 
+HOST = "41.236.245.75"
+PORT = 50505
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect(('chat.up.railway.app', 50505))
+client.connect((HOST, PORT))
 
 def receive():
     buffer = b""
@@ -20,7 +22,11 @@ def receive():
             while b"<END>" in buffer:
                 full_msg, buffer = buffer.split(b"<END>", 1)
 
-                header, body = full_msg.split(b"\n", 1)
+                try:
+                    header, body = full_msg.split(b"\n", 1)
+                except:
+                    continue
+
                 info = header.decode().split("|")
 
                 if info[0] == "MSG":
@@ -38,7 +44,7 @@ def receive():
 
 def send_msg():
     msg = entry.get()
-    if msg == "":
+    if msg.strip() == "":
         return
 
     packet = f"MSG|text\n{msg}".encode()
@@ -60,7 +66,7 @@ def send_file():
 
     chat.insert(tk.END, f"Sent: {path}\n")
 
-
+# UI
 root = tk.Tk()
 root.title("Chat")
 
@@ -73,7 +79,7 @@ entry.pack()
 btn_send = tk.Button(root, text="Send Text", command=send_msg)
 btn_send.pack()
 
-btn_file = tk.Button(root, text="Send File / Image / Video", command=send_file)
+btn_file = tk.Button(root, text="Send File", command=send_file)
 btn_file.pack()
 
 threading.Thread(target=receive, daemon=True).start()
