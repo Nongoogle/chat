@@ -31,18 +31,20 @@ def receive():
                 info = header.decode().split("|")
 
                 if info[0] == "MSG":
-                    sender = info[1]  
+                    sender = info[1] 
+                    chat.config(state=tk.NORMAL) 
                     chat.insert(tk.END, f"{sender}: {body.decode()}\n")
                     chat.yview(tk.END)
-
+                    chat.config(state=tk.DISABLED)
                 elif info[0] == "FILE":
                     sender = info[1]          
                     filename = "received_" + info[2]  
                     with open(filename, "wb") as f:
                         f.write(body)
-
+                    chat.config(state=tk.NORMAL)
                     chat.insert(tk.END, f"{sender} sent file: {filename}\n")
                     chat.yview(tk.END)
+                    chat.config(state=tk.DISABLED)
 
         except:
             break
@@ -54,10 +56,11 @@ def send_msg():
 
     packet = f"MSG|{username}\n{msg}".encode()
     client.sendall(packet + b"<END>")
-
+    chat.config(state=tk.NORMAL)
     chat.insert(tk.END, "Me: " + msg + "\n")
     entry.delete(0, tk.END)
     chat.yview(tk.END)
+    chat.config(state=tk.DISABLED)
 
 def send_file():
     path = filedialog.askopenfilename()
@@ -69,10 +72,10 @@ def send_file():
 
     header = f"FILE|{username}|{filename}\n".encode()
     client.sendall(header + data + b"<END>")
-
+    chat.config(state=tk.NORMAL)
     chat.insert(tk.END, f"Sent: {path}\n")
     chat.yview(tk.END)
-    
+    chat.config(state=tk.DISABLED)
 
 # UI
 root = tk.Tk()
@@ -85,6 +88,7 @@ chat = tk.Text(
     bg="#2b2b2b",
     fg="white",
     insertbackground="white",
+    state=tk.DISABLED
     )
 chat.pack(padx=10, pady=10)
 
